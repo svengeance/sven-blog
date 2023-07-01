@@ -130,11 +130,11 @@ Taking everything stated prior in this article into consideration, our integrati
 ## Reviewing the Execution
 We'll break down the pieces of the example integration test that demonstate the article's concepts. At a high level, here are the big pieces of our framework:
 
-- xUnit: Popular testing framework, albeit opinionated about its lifecycle and geared towards integration tests with an unfortunate reliance on construcotrs for shared test context
+- xUnit: Popular testing framework, albeit opinionated about its lifecycle and geared towards integration tests, albeit with an unfortunate reliance on constructors for shared test context
   - `IAsyncLifetime`: Asynchronously create and dispose of a resource, called before/after each test
   - `IClassFixture<TFixture>`: Ensure all tests in the same **class** share the same instance of `TFixture`, essentially creating `TFixture` once per class. Ideal for expensive initialization
   - xUnit Test Lifecycle: Constructors in a test class are called before each test, as is any code in `IAsyncLifetime`
-- AutoFixture: Facilitates object creation, especially useful for creating objects whose constructors and nullability demand all properties are set despite our test only caring about a few specific ones. "Create an object, I don't care how, but set this property" is a way to express itnent to future developers
+- AutoFixture: Facilitates object creation, especially useful for creating objects whose constructors and nullability demand all properties are set despite our test only caring about a few specific ones. "Create an object, I don't care how, but set this property" is a way to express intent to future developers
 - FluentAssertions: An assertion library; not very relevant for the article, but a preference nonetheless
 
 ### Mimicking Real Code
