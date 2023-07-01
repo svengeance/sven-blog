@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/pup-test.png">
 <meta property="article:published_time" content="2023-06-26T05:11:27.000Z">
-<meta property="article:modified_time" content="2023-07-01T05:48:06.558Z">
+<meta property="article:modified_time" content="2023-07-01T06:21:02.005Z">
 <meta property="article:author" content="Stephen (Sven) Vernyi">
 <meta property="article:tag" content="Testing">
 <meta property="article:tag" content="xUnit">
@@ -168,7 +168,7 @@
       
         <time datetime="2023-06-26T05:11:27.000Z" class="dt-published" itemprop="datePublished">2023-06-26</time>
         
-        (Updated: <time datetime="2023-07-01T05:48:06.558Z" class="dt-updated" itemprop="dateModified">2023-07-01</time>)
+        (Updated: <time datetime="2023-07-01T06:21:02.005Z" class="dt-updated" itemprop="dateModified">2023-07-01</time>)
         
       
     </div>
@@ -251,9 +251,9 @@
 <h3 id="when-to-not-mock" tabindex="-1" id="When-to-NOT-Mock"><a class="header-anchor" href="#when-to-not-mock">When to NOT Mock</a></h3>
 <p>The above summation outlines levels to abstain using mocks: at the same isolation level (or lower) than the current test. Unit tests don’t fake lines of code, integration tests don’t fake internal services or classes, and system tests (those capable of targeting a deployed envrionment) wouldn’t mock any part of the system. The general guideline is: once you’ve set your isolation level, be true to it and test all of its code. Utilizing test doubles at the same (or lower) level of your isolation means you are testing an <em>entirely different [method|integration|application]</em>, and it holds much less value.</p>
 <h3 id="stubs%2C-fakes%2C-mocks%2C-and-exceptions-to-the-rules" tabindex="-1" id="Stubs-Fakes-Mocks-and-Exceptions-to-the-Rules"><a class="header-anchor" href="#stubs%2C-fakes%2C-mocks%2C-and-exceptions-to-the-rules">Stubs, Fakes, Mocks, and Exceptions to the Rules</a></h3>
-<p>Guidelines have reasonable deviations, and the above is no example. For a definition of these three test doubles, <a target="_blank" rel="noopener" href="https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing">see these examples</a>.</p>
+<p>Guidelines have reasonable deviations, and the above is no exception. For a definition of these three test doubles, <a target="_blank" rel="noopener" href="https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing">see these examples</a>.</p>
 <p>One exception to the above is <em>stubbing out</em> services, rather than so-called “bad communication” tests. Good software architecture will isolate and minimize the code surrounding usage of a 3’rd party service that is outside of your control. This is done so that all of its usage is hidden behind a simple interface that can be stubbed or mocked out (or, outside of testing, replaced with another similar service down the line!).</p>
-<p>Another exception might be including fakes in unit and integration tests when convenient. Replacing a distributed cache with a built-in in-memory cache when unit testing is an example where the functionality is effectively the same, but it becomes a controlled, in-process communication that alleviates <em>needing</em> to mock the cache in each test, saving developers time and cutting down on on code. Some smaller integration tests may also prefer to exercise one external system at a time, or not at all - such as logging to a 3’rd party log/analytics provider during.</p>
+<p>Another exception might be including fakes in unit and integration tests when it doesn’t meaningfully compromise the code under test. Replacing a distributed cache with a built-in in-memory cache when unit testing is an example where the functionality is effectively the same, but it becomes a controlled, in-process communication that alleviates <em>needing</em> to mock the cache in each test, saving developers time and cutting down on on code. Some smaller integration tests may also prefer to exercise one external system at a time, or not at all - such as logging to a 3’rd party log/analytics provider during.</p>
 <h2 id="defining-an-%E2%80%9Cintegration-test%E2%80%9D" tabindex="-1" id="Defining-an-“Integration-Test”"><a class="header-anchor" href="#defining-an-%E2%80%9Cintegration-test%E2%80%9D">Defining an “Integration Test”</a></h2>
 <p>With the above axes in mind, we can create a definition for this article on what an integration test means.</p>
 <ul>
