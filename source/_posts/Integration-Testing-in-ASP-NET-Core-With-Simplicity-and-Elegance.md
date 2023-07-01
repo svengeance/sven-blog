@@ -1,5 +1,6 @@
 ---
-title: Integration Testing in ASP.NET Core With Simplicity and date: 2023-07-01 00:11:27
+title: Integration Testing in ASP.NET Core With Simplicity and Elegance
+date: 2023-07-01 00:11:27
 tags:
   - Testing
   - xUnit
@@ -25,7 +26,7 @@ Given that there are varied interpretations of labels when it comes to testing, 
 - **Isolation**: How much of a single system, or how many systems, are involved in a test. Atomic (method), group (classes/internal), commnuication (external)
   - The above article defines two kinds of external communication: "good" and "bad". Bad communication is to an uncontrolled service (like a Facebook API), whereas good communication is to a controlled service (an ephemeral database)
 
-### What to Test, What to Fake, and Isolation
+### Test Isolation Breakdown
 As the isolation level changes, two things change: the scope of live code being tested, and the units we may substitute.
 
 - **High Isolation**
@@ -53,7 +54,7 @@ As the isolation level changes, two things change: the scope of live code being 
 ### When to NOT Mock
 The above summation outlines levels to abstain using mocks: at the same isolation level (or lower) than the current test. Unit tests don't fake lines of code, integration tests don't fake internal services or classes, and system tests (those capable of targeting a deployed envrionment) wouldn't mock any part of the system. The general guideline is: once you've set your isolation level, be true to it and test all of its code. Utilizing test doubles at the same (or lower) level of your isolation means you are testing an _entirely different [method|integration|application]_, and it holds much less value.
 
-### Stubs, Fakes, Mocks, and Exceptions to the Rules
+### Stubs, Fakes, Mocks, and Exceptions
 Guidelines have reasonable deviations, and the above is no exception. For a definition of these three test doubles, [see these examples](https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing).
 
 One exception to the above is _stubbing out_ services, rather than so-called "bad communication" tests. Good software architecture will isolate and minimize the code surrounding usage of a 3'rd party service that is outside of your control. This is done so that all of its usage is hidden behind a simple interface that can be stubbed or mocked out (or, outside of testing, replaced with another similar service down the line!).
@@ -81,10 +82,9 @@ Given that an E2E test in this context requires one to spin up an in-memory test
 Having both kinds of tests in your suite gives you the opportunity to test individual methods and interim states not possible with E2E tests, which execute endpoints in whole. Understand the pros and cons of each, and vary your amounts accordingly. 
 
 ## ASP.NET Core vs .NET Framework: Inverted
+One key difference in the newer framework lies in embracing dependency injection via _Microsoft.Extensions.DependencyInjection_, which be seen in the framework itself with needs like configuration and HttpContext access done over injected interfaces.
 
-One of the differences between the two frameworks is the first-class support for dependency injection via Microsoft.Extensions.DependencyInjection, and all web project templates using it by default. Another change is the means by which common needs like configuration and HTTP context are accessed, both again receiving first-class DI support as opposed to the traditional static method access.
-
-Similarly, libraries which add functionality to your API will often do so in the form of additioanl service registrations via extension methods over `IServiceCollection`. These extension methods add various services provided by the library, with the library itself relying on IoC.
+Similarly, libraries which add functionality to your API will often do so in the form of additional service registrations via extension methods over `IServiceCollection`. These extension methods add various services provided by the library, with the library itself relying on IoC.
 
 In summary:
 - Our units for integration tests use IoC as a way of declaring their dependencies
@@ -184,7 +184,7 @@ public class TestServices: IAsyncLifetime
 
 This represents our `TFixture` that will be shared among all tests in a class. The test configuration may read a file such as user secrets or appsettings, so we opt to do this less frequently than for every unique test case. The configuration added in `ConfigureTestConfiguration` is picked up by our application's extension `AddApplicationServices`, giving us a chance to configure test data any way we choose, perhaps user secrets for shared integration test databases, environment variables for our test runners, etc.
 
-### Managing Lifetimes and Facilitating SUT Creation
+### Lifetimes and SUT Creation
 ```cs
 
 public abstract class BaseIntegrationTest: IAsyncLifetime, IClassFixture<TestServices> // Share `TestServices` among all tests in the class
