@@ -1,0 +1,19 @@
+h1, h2 {
+    margin: 1rem 0 0 0 !important;
+}
+
+h2 {
+    font-size: 1.1rem !important;
+}
+
+h3 {
+    text-decoration: none !important;
+}
+
+#toc {
+    max-width: 27.5vw !important;
+}
+
+.toc-item {
+    margin: 4px 0px !important;
+}
