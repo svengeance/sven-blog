@@ -280,7 +280,7 @@ Finally, the tests themselves. No boilerplate code (other than an unfortunate co
 ## Closing thoughts
 This article's intention is to express the importance of testing _real_ code, minimizing the setup _to_ test, and to offer a reasonable demonstration of how this can be done.
 
-## TL;DR
+## TLDR
 I get it, no hard feelings - brevity is, perhaps, not my strongsuit.
 
 **Integration Tests _Should_**:
