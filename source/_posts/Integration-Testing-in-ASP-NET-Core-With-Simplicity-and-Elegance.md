@@ -1,6 +1,5 @@
 ---
-title: Integration Testing in ASP.NET Core With Simplicity and Elegance
-date: 2023-06-26 00:11:27
+title: Integration Testing in ASP.NET Core With Simplicity and date: 2023-07-01 00:11:27
 tags:
   - Testing
   - xUnit
@@ -19,7 +18,7 @@ This short writeup is meant to foster a mutual definition of integration tests, 
 # Concepts
 
 ## Testing Taxonomies
-Given that there are varied understands of labels when it comes to testing, it's more effectual to discuss test methodologies by defining their conceptual taxonomies. [This article](https://blog.7mind.io/constructive-test-taxonomy.html) does an excellent job, and gives us three axes to categorize tests: **Intention**, **Encapsulation**, **Isolation**.
+Given that there are varied interpretations of labels when it comes to testing, it's more effectual to discuss test methodologies by defining their conceptual taxonomies - in other words, into what component parts can we break down a test methodology. [This article](https://blog.7mind.io/constructive-test-taxonomy.html) does an excellent job, and gives us three axes to categorize tests: **Intention**, **Encapsulation**, **Isolation**.
 
 - **Intention**: The intent of our tests, whether they're testing contracts/behaviors, regressions, or benchmarks
 - **Encapsulation**: The extent to which the test is aware of the unit being tested. White box (knows all), black box (knows nothing), effectual (strictly observe side effects)
@@ -55,21 +54,21 @@ As the isolation level changes, two things change: the scope of live code being 
 The above summation outlines levels to abstain using mocks: at the same isolation level (or lower) than the current test. Unit tests don't fake lines of code, integration tests don't fake internal services or classes, and system tests (those capable of targeting a deployed envrionment) wouldn't mock any part of the system. The general guideline is: once you've set your isolation level, be true to it and test all of its code. Utilizing test doubles at the same (or lower) level of your isolation means you are testing an _entirely different [method|integration|application]_, and it holds much less value.
 
 ### Stubs, Fakes, Mocks, and Exceptions to the Rules
-Guidelines have reasonable deviations, and the above is no example. For a definition of these three test doubles, [see these examples](https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing).
+Guidelines have reasonable deviations, and the above is no exception. For a definition of these three test doubles, [see these examples](https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing).
 
 One exception to the above is _stubbing out_ services, rather than so-called "bad communication" tests. Good software architecture will isolate and minimize the code surrounding usage of a 3'rd party service that is outside of your control. This is done so that all of its usage is hidden behind a simple interface that can be stubbed or mocked out (or, outside of testing, replaced with another similar service down the line!).
 
-Another exception might be including fakes in unit and integration tests when convenient. Replacing a distributed cache with a built-in in-memory cache when unit testing is an example where the functionality is effectively the same, but it becomes a controlled, in-process communication that alleviates _needing_ to mock the cache in each test, saving developers time and cutting down on on code. Some smaller integration tests may also prefer to exercise one external system at a time, or not at all - such as logging to a 3'rd party log/analytics provider during.
+Another exception might be including fakes in unit and integration tests when it doesn't meaningfully compromise the code under test. Replacing a distributed cache with a built-in in-memory cache when unit testing is an example where the functionality is effectively the same, but it becomes a controlled, in-process communication that alleviates _needing_ to mock the cache in each test, saving developers time and cutting down on on code. Some smaller integration tests may also prefer to exercise one external system at a time, or not at all - such as logging to a 3'rd party log/analytics provider during.
   
 ## Defining an "Integration Test"
 With the above axes in mind, we can create a definition for this article on what an integration test means.
 
 - **Intention**: Contracts
-  - These tests verify behavior of the specified contracts in the application. A contract can be analogous the acceptance criteria of a given user story. Integration testing for regressions is less common.
+  - These tests verify behavior of the specified contracts in the application. A contract can be analogous the acceptance criteria of a given user story
 - **Encapsulation**: Black Box, occasionally Effectual
   - Usually our tests follow a pattern: setup the external and internal system in a controlled, execute a behavior, and ensure the result of the behavior is expected. If the behavior has no returned result, we may verify the side effect manually
 - **Isolation**: "Good" Communication
-  - We typically don't write integration tests solely to verify behavior of real, local groups of code. The test will integrate with some external dependency, and utilize our real code to do so.
+  - We typically don't write integration tests solely to verify behavior of real, local groups of code. The test will integrate with some external dependency, and utilize our real code to do so
 
 # Integration Testing in ASP.NET Core
 Now that there is a shared understanding of the taxonomy of an integration test, we can discuss how the approach might work in ASP.NET Core.
@@ -77,7 +76,7 @@ Now that there is a shared understanding of the taxonomy of an integration test,
 ## E2E vs Integration Testing
 Searching `ASP.NET Core Integration Test` will lead you to find many articles that talk about integration testing starting at the controller/HTTP level. I find this doesn't provide much differentiation from an end-to-end test (searching for `ASP.NET Core E2E Test` will actually give you similar-looking articles!).
 
-Given that an E2E test in this context requires one to spin up an in-memory test server and form HTTP requests, and that such a webserver may complicate its request handling with various pieces of infrastructure and middleware before reaching the business logic, we can invoke top-level methods in our tests to bypass this. These tests establish confidence that the logic of the application past the web layer is sound, though it comes with the tradeoff of coupling such tests to the public API of your high level services.
+Given that an E2E test in this context requires one to spin up an in-memory test server and form HTTP requests, and that such a webserver may complicate its request handling with various pieces of infrastructure and middleware before reaching the business logic, it often makes sense to directly invoke services. These tests establish confidence that the logic of the application past the web layer is sound, though it comes with the tradeoff of coupling such tests to the public API of your high level services.
 
 Having both kinds of tests in your suite gives you the opportunity to test individual methods and interim states not possible with E2E tests, which execute endpoints in whole. Understand the pros and cons of each, and vary your amounts accordingly. 
 
