@@ -290,6 +290,6 @@ I get it, no hard feelings - brevity is, perhaps, not my strongsuit.
 - Only create [test doubles](https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing) for calls to uncontrollable 3'rd party services
 - Alleviate developers from as much boilerplate as possible by managing lifecycle and creation of resources
 
-See https://github.com/svengeance/demo-integration-testing/ for an example.
+See [The demo-integration-testing repo](https://github.com/svengeance/demo-integration-testing/) for an example.
 
 Thank you for staying with me. Have a great day, drink water, and enjoy the little things.
