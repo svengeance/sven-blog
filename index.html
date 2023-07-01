@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
+    <!-- strip the URL before anyone notices -->
+    <script>
+        /**
+         * Trim final slash in URL
+         */
+        if (window.location.pathname.endsWith('/'))
+        {
+          var normalizedLocation = `${location.pathname.slice(0, -1)}${location.hash}`;
+          console.log(normalizedLocation);
+          history.replaceState(null, '', normalizedLocation);    
+        }
+    </script>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,6 +68,9 @@
     <!-- styles -->
     
 <link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/custom.css">
 
     <!-- persian styles -->
     
@@ -174,6 +189,26 @@
     
       
     
+    
+      <li class="post-item">
+        
+    <div class="meta">
+      
+        
+          <time datetime="2023-06-26T05:11:27.000Z" class="dt-published" itemprop="datePublished">2023-06-26</time>
+        
+      
+    </div>
+
+
+        <span>
+    
+        <a class="" href="/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/">Integration Testing in ASP.NET Core With Simplicity and Elegance</a>
+    
+
+
+</span>
+      </li>
     
       <li class="post-item">
         

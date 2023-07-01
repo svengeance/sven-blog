@@ -1,6 +1,18 @@
 <!DOCTYPE html>
 <html lang=en>
 <head>
+    <!-- strip the URL before anyone notices -->
+    <script>
+        /**
+         * Trim final slash in URL
+         */
+        if (window.location.pathname.endsWith('/'))
+        {
+          var normalizedLocation = `${location.pathname.slice(0, -1)}${location.hash}`;
+          console.log(normalizedLocation);
+          history.replaceState(null, '', normalizedLocation);    
+        }
+    </script>
     <!-- so meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -59,6 +71,9 @@
     
 <link rel="stylesheet" href="/css/style.css">
 
+    
+<link rel="stylesheet" href="/css/custom.css">
+
     <!-- persian styles -->
     
     <!-- rss -->
@@ -91,6 +106,8 @@
     <br/>
     <span id="actions">
       <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
@@ -165,12 +182,18 @@
 
   <div class="content e-content" itemprop="articleBody">
     <p>I believe these are necessary for every new tech stack acquired.</p>
-<p>For better or for worse it becomes incresingly pleasant when things “just work” as expected. I’d previously started (and subsequently abandoned due to life events) a blog built on Hugo. I don’t recall feeling quite as taken care of - as a developer&#x2F;writer - as Hexo has.  </p>
+<p>For better or for worse it becomes incresingly pleasant when things “just work” as expected. I’d previously started (and subsequently abandoned due to life events) a blog built on Hugo. I don’t recall feeling quite as taken care of - as a developer/writer - as Hexo has.</p>
 <p>Here’s to what could be a fun adventure, passionately rambling about various topics and projects.</p>
 <img src="https://media.tenor.com/LCpcrdtI0GYAAAAM/vibing-st6.gif" class="" title="Vibing">
   </div>
 </article>
 
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
 
 
         
@@ -299,6 +322,26 @@
 <!-- Disqus Comments -->
 
 <!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'svengeance/sven-blog';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
 
 </body>
 </html>

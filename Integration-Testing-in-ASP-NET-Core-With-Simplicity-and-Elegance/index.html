@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- strip the URL before anyone notices -->
+    <script>
+        /**
+         * Trim final slash in URL
+         */
+        if (window.location.pathname.endsWith('/'))
+        {
+          var normalizedLocation = `${location.pathname.slice(0, -1)}${location.hash}`;
+          console.log(normalizedLocation);
+          history.replaceState(null, '', normalizedLocation);    
+        }
+    </script>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Ramblings and writings, themed towards Microsoft technologies.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Integration Testing in ASP.NET Core With Simplicity and Elegance">
+<meta property="og:url" content="https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/index.html">
+<meta property="og:site_name" content="Sven">
+<meta property="og:description" content="Ramblings and writings, themed towards Microsoft technologies.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/pup-test.png">
+<meta property="article:published_time" content="2023-06-26T05:11:27.000Z">
+<meta property="article:modified_time" content="2023-07-01T05:09:27.099Z">
+<meta property="article:author" content="Stephen (Sven) Vernyi">
+<meta property="article:tag" content="Testing">
+<meta property="article:tag" content="xUnit">
+<meta property="article:tag" content="AutoFixture">
+<meta property="article:tag" content="Removing Boilerplate">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/pup-test.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-android.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-apple.png">
+        
+      
+    
+    <!-- title -->
+    <title>Integration Testing in ASP.NET Core With Simplicity and Elegance</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPJ6GMQE1Y"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JPJ6GMQE1Y');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/custom.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/hello-world/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&text=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&is_video=false&description=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Integration Testing in ASP.NET Core With Simplicity and Elegance&body=Check out this article: https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&name=Integration Testing in ASP.NET Core With Simplicity and Elegance&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&t=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#preamble"><span class="toc-number">1.</span> <span class="toc-text">Preamble</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#concepts"><span class="toc-number">2.</span> <span class="toc-text">Concepts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#testing-taxonomies"><span class="toc-number">2.1.</span> <span class="toc-text">Testing Taxonomies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-to-test,-what-to-fake,-and-isolation"><span class="toc-number">2.1.1.</span> <span class="toc-text">What to Test, What to Fake, and Isolation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#when-to-not-mock"><span class="toc-number">2.1.2.</span> <span class="toc-text">When to NOT Mock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stubs,-fakes,-mocks,-and-exceptions-to-the-rules"><span class="toc-number">2.1.3.</span> <span class="toc-text">Stubs, Fakes, Mocks, and Exceptions to the Rules</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-an-%E2%80%9Cintegration-test%E2%80%9D"><span class="toc-number">2.2.</span> <span class="toc-text">Defining an “Integration Test”</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#integration-testing-in-asp.net-core"><span class="toc-number">3.</span> <span class="toc-text">Integration Testing in ASP.NET Core</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#e2e-vs-integration-testing"><span class="toc-number">3.1.</span> <span class="toc-text">E2E vs Integration Testing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asp.net-core-vs-.net-framework:-inverted"><span class="toc-number">3.2.</span> <span class="toc-text">ASP.NET Core vs .NET Framework: Inverted</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bringing-d.i.-to-integration-tests"><span class="toc-number">3.3.</span> <span class="toc-text">Bringing D.I. to Integration Tests</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#test-setup"><span class="toc-number">4.</span> <span class="toc-text">Test Setup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-d.i.-container"><span class="toc-number">4.1.</span> <span class="toc-text">Creating the D.I. Container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cleaning-up-resources"><span class="toc-number">4.2.</span> <span class="toc-text">Cleaning Up Resources</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-system-under-test"><span class="toc-number">4.3.</span> <span class="toc-text">Creating the System Under Test</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#demonstration"><span class="toc-number">5.</span> <span class="toc-text">Demonstration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#testable-elements"><span class="toc-number">5.1.</span> <span class="toc-text">Testable Elements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-plan"><span class="toc-number">5.2.</span> <span class="toc-text">The Plan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reviewing-the-execution"><span class="toc-number">5.3.</span> <span class="toc-text">Reviewing the Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mimicking-real-code"><span class="toc-number">5.3.1.</span> <span class="toc-text">Mimicking Real Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#managing-lifetimes-and-facilitating-sut-creation"><span class="toc-number">5.3.2.</span> <span class="toc-text">Managing Lifetimes and Facilitating SUT Creation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-test"><span class="toc-number">5.3.3.</span> <span class="toc-text">The Test</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#closing-thoughts"><span class="toc-number">6.1.</span> <span class="toc-text">Closing thoughts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tl;dr"><span class="toc-number">6.2.</span> <span class="toc-text">TL;DR</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Integration Testing in ASP.NET Core With Simplicity and Elegance
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Stephen (Sven) Vernyi</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-06-26T05:11:27.000Z" class="dt-published" itemprop="datePublished">2023-06-26</time>
+        
+        (Updated: <time datetime="2023-07-01T05:09:27.099Z" class="dt-updated" itemprop="dateModified">2023-07-01</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Testing/">Testing</a> › <a class="category-link" href="/categories/Testing/Integration-Testing/">Integration Testing</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/AutoFixture/" rel="tag">AutoFixture</a>, <a class="p-category" href="/tags/Removing-Boilerplate/" rel="tag">Removing Boilerplate</a>, <a class="p-category" href="/tags/Testing/" rel="tag">Testing</a>, <a class="p-category" href="/tags/xUnit/" rel="tag">xUnit</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="preamble" tabindex="-1"><a class="header-anchor" href="#preamble">Preamble</a></h1>
+<p>This short writeup is meant to foster a mutual definition of integration tests, their purpose, and some of their setup. It will briefly cover everything from the conceptual reasoning behind integration tests, to their execution and structure within ASP.NET Core.</p>
+<img src="/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/pup-test.png" class="">
+<h1 id="concepts" tabindex="-1"><a class="header-anchor" href="#concepts">Concepts</a></h1>
+<h2 id="testing-taxonomies" tabindex="-1" id="Testing-Taxonomies"><a class="header-anchor" href="#testing-taxonomies">Testing Taxonomies</a></h2>
+<p>Given that there are varied understands of labels when it comes to testing, it’s more effectual to discuss test methodologies by defining their conceptual taxonomies. <a target="_blank" rel="noopener" href="https://blog.7mind.io/constructive-test-taxonomy.html">This article</a> does an excellent job, and gives us three axes to categorize tests: <strong>Intention</strong>, <strong>Encapsulation</strong>, <strong>Isolation</strong>.</p>
+<ul>
+<li><strong>Intention</strong>: The intent of our tests, whether they’re testing contracts/behaviors, regressions, or benchmarks</li>
+<li><strong>Encapsulation</strong>: The extent to which the test is aware of the unit being tested. White box (knows all), black box (knows nothing), effectual (strictly observe side effects)</li>
+<li><strong>Isolation</strong>: How much of a single system, or how many systems, are involved in a test. Atomic (method), group (classes/internal), commnuication (external)
+<ul>
+<li>The above article defines two kinds of external communication: “good” and “bad”. Bad communication is to an uncontrolled service (like a Facebook API), whereas good communication is to a controlled service (an ephemeral database)</li>
+</ul>
+</li>
+</ul>
+<h3 id="what-to-test%2C-what-to-fake%2C-and-isolation" tabindex="-1" id="What-to-Test-What-to-Fake-and-Isolation"><a class="header-anchor" href="#what-to-test%2C-what-to-fake%2C-and-isolation">What to Test, What to Fake, and Isolation</a></h3>
+<p>As the isolation level changes, two things change: the scope of live code being tested, and the units we may substitute.</p>
+<ul>
+<li><strong>High Isolation</strong>
+<ul>
+<li>Test: Individual methods</li>
+<li>Purpose: Verify the logic of the public surface area of classes</li>
+<li>Mock: Calls to other classes</li>
+<li>Do not Mock: Internals of methods
+<ul>
+<li>This could be akin to changing which lines of code get compiled when testing.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Medium Isolation</strong>
+<ul>
+<li>Test: Whole classes in the application</li>
+<li>Purpose: Observe the interaction between classes in an application</li>
+<li>Mock: Usages of external (out-of-application) services</li>
+<li>Do not change: Internals of classes</li>
+</ul>
+</li>
+<li><strong>Low Isolation</strong>
+<ul>
+<li>Test: Whole applications</li>
+<li>Purpose: Observe two or more applications interacting with each other</li>
+<li>Mock: “Bad communication” to services (see above definition)</li>
+<li>Do not change: Internals of applications</li>
+</ul>
+</li>
+<li><strong>No Isolation</strong>
+<ul>
+<li>Test: Whole (perhaps deployed) systems</li>
+<li>Purpose: Observe the behavior of a system</li>
+<li>Mock: Nothing</li>
+<li>Do not change: Internals of the system</li>
+</ul>
+</li>
+</ul>
+<h3 id="when-to-not-mock" tabindex="-1" id="When-to-NOT-Mock"><a class="header-anchor" href="#when-to-not-mock">When to NOT Mock</a></h3>
+<p>The above summation outlines levels to abstain using mocks: at the same isolation level (or lower) than the current test. Unit tests don’t fake lines of code, integration tests don’t fake internal services or classes, and system tests (those capable of targeting a deployed envrionment) wouldn’t mock any part of the system. The general guideline is: once you’ve set your isolation level, be true to it and test all of its code. Utilizing test doubles at the same (or lower) level of your isolation means you are testing an <em>entirely different [method|integration|application]</em>, and it holds much less value.</p>
+<h3 id="stubs%2C-fakes%2C-mocks%2C-and-exceptions-to-the-rules" tabindex="-1" id="Stubs-Fakes-Mocks-and-Exceptions-to-the-Rules"><a class="header-anchor" href="#stubs%2C-fakes%2C-mocks%2C-and-exceptions-to-the-rules">Stubs, Fakes, Mocks, and Exceptions to the Rules</a></h3>
+<p>Guidelines have reasonable deviations, and the above is no example. For a definition of these three test doubles, <a target="_blank" rel="noopener" href="https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing">see these examples</a>.</p>
+<p>One exception to the above is <em>stubbing out</em> services, rather than so-called “bad communication” tests. Good software architecture will isolate and minimize the code surrounding usage of a 3’rd party service that is outside of your control. This is done so that all of its usage is hidden behind a simple interface that can be stubbed or mocked out (or, outside of testing, replaced with another similar service down the line!).</p>
+<p>Another exception might be including fakes in unit and integration tests when convenient. Replacing a distributed cache with a built-in in-memory cache when unit testing is an example where the functionality is effectively the same, but it becomes a controlled, in-process communication that alleviates <em>needing</em> to mock the cache in each test, saving developers time and cutting down on on code. Some smaller integration tests may also prefer to exercise one external system at a time, or not at all - such as logging to a 3’rd party log/analytics provider during.</p>
+<h2 id="defining-an-%E2%80%9Cintegration-test%E2%80%9D" tabindex="-1" id="Defining-an-“Integration-Test”"><a class="header-anchor" href="#defining-an-%E2%80%9Cintegration-test%E2%80%9D">Defining an “Integration Test”</a></h2>
+<p>With the above axes in mind, we can create a definition for this article on what an integration test means.</p>
+<ul>
+<li><strong>Intention</strong>: Contracts
+<ul>
+<li>These tests verify behavior of the specified contracts in the application. A contract can be analogous the acceptance criteria of a given user story. Integration testing for regressions is less common.</li>
+</ul>
+</li>
+<li><strong>Encapsulation</strong>: Black Box, occasionally Effectual
+<ul>
+<li>Usually our tests follow a pattern: setup the external and internal system in a controlled, execute a behavior, and ensure the result of the behavior is expected. If the behavior has no returned result, we may verify the side effect manually</li>
+</ul>
+</li>
+<li><strong>Isolation</strong>: “Good” Communication
+<ul>
+<li>We typically don’t write integration tests solely to verify behavior of real, local groups of code. The test will integrate with some external dependency, and utilize our real code to do so.</li>
+</ul>
+</li>
+</ul>
+<h1 id="integration-testing-in-asp.net-core" tabindex="-1"><a class="header-anchor" href="#integration-testing-in-asp.net-core">Integration Testing in ASP.NET Core</a></h1>
+<p>Now that there is a shared understanding of the taxonomy of an integration test, we can discuss how the approach might work in ASP.NET Core.</p>
+<h2 id="e2e-vs-integration-testing" tabindex="-1" id="E2E-vs-Integration-Testing"><a class="header-anchor" href="#e2e-vs-integration-testing">E2E vs Integration Testing</a></h2>
+<p>Searching <code>ASP.NET Core Integration Test</code> will lead you to find many articles that talk about integration testing starting at the controller/HTTP level. I find this doesn’t provide much differentiation from an end-to-end test (searching for <code>ASP.NET Core E2E Test</code> will actually give you similar-looking articles!).</p>
+<p>Given that an E2E test in this context requires one to spin up an in-memory test server and form HTTP requests, and that such a webserver may complicate its request handling with various pieces of infrastructure and middleware before reaching the business logic, we can invoke top-level methods in our tests to bypass this. These tests establish confidence that the logic of the application past the web layer is sound, though it comes with the tradeoff of coupling such tests to the public API of your high level services.</p>
+<p>Having both kinds of tests in your suite gives you the opportunity to test individual methods and interim states not possible with E2E tests, which execute endpoints in whole. Understand the pros and cons of each, and vary your amounts accordingly.</p>
+<h2 id="asp.net-core-vs-.net-framework%3A-inverted" tabindex="-1" id="ASP-NET-Core-vs-NET-Framework-Inverted"><a class="header-anchor" href="#asp.net-core-vs-.net-framework%3A-inverted">ASP.NET Core vs .NET Framework: Inverted</a></h2>
+<p>One of the differences between the two frameworks is the first-class support for dependency injection via Microsoft.Extensions.DependencyInjection, and all web project templates using it by default. Another change is the means by which common needs like configuration and HTTP context are accessed, both again receiving first-class DI support as opposed to the traditional static method access.</p>
+<p>Similarly, libraries which add functionality to your API will often do so in the form of additioanl service registrations via extension methods over <code>IServiceCollection</code>. These extension methods add various services provided by the library, with the library itself relying on IoC.</p>
+<p>In summary:</p>
+<ul>
+<li>Our units for integration tests use IoC as a way of declaring their dependencies</li>
+<li>Configuration of services within the ASP.NET Core framework within the application use IoC</li>
+<li>Libraries use IoC to inject their services and configuration</li>
+<li>Infrastructure needs (logging, configuration) use IoC</li>
+</ul>
+<h2 id="bringing-d.i.-to-integration-tests" tabindex="-1" id="Bringing-D-I-to-Integration-Tests"><a class="header-anchor" href="#bringing-d.i.-to-integration-tests">Bringing D.I. to Integration Tests</a></h2>
+<p>Given that the application is built on the concept of a D.I. framework supplying dependencies to services, controllers, middlewares, etc - it would likewise be essential to resolve our system under test via D.I.</p>
+<p>Remember earlier that we established it is <em>necessary</em> to faithfully test your codebase unmodified at-or-below your isolation level, thus our tests should seek to strictly mock undesired external calls. Moreover, since the configuration of our application/services is done via D.I., it is an easy choice to <em>reuse</em> the D.I. initialization in our application - supplying it with test values where needed when configuring external services - than to attempt to manually recreate the various systems under test.</p>
+<h1 id="test-setup" tabindex="-1"><a class="header-anchor" href="#test-setup">Test Setup</a></h1>
+<h2 id="creating-the-d.i.-container" tabindex="-1" id="Creating-the-D-I-Container"><a class="header-anchor" href="#creating-the-d.i.-container">Creating the D.I. Container</a></h2>
+<p>Typically, service registration is achieved in the <code>Startup</code> class of your ASP.NET Core application. Minimal APIs and top-level statements have muddied this a bit, but extracting registration is an easy remedy (and possibly recommended to avoid minimal APIs altogether once the app hits a certain size - but, writing for another day).</p>
+<p>Given our commitment to testing our code as whole as possible, we should execute all service registrations. There is a chance that registration of services can replace or otherwise modify existing services, and it is a <em>certainty</em> that our application may use any injected service. Failure to register all services as is done in our application means that developers writing tests are responsible for faithfully recreating <em>any</em> injectable object.</p>
+<p>It becomes, then, an easy decision to reuse as much as possible our initialization logic and recreate a service collection just the same as is done in our <code>Startup</code> class. Fortunately, a mechanism exists to facilitate exactly this: either creating both the <code>Host</code> and <code>Server</code> with <code>WebApplicationFactory</code>, or <em>strictly</em> creating the <code>Host</code> with <code>WebhostBuilder</code>. Both options let us customize the services and configuration, however the primary difference is that  <code>WebApplicationFactory</code> will recreate your server in-process, executing the entrypoint of your application. This is more expensive than simple service registration, and is unnecessary if you’re not going to be executing tests against your controllers.</p>
+<h2 id="cleaning-up-resources" tabindex="-1" id="Cleaning-Up-Resources"><a class="header-anchor" href="#cleaning-up-resources">Cleaning Up Resources</a></h2>
+<p>Part of the nature of a D.I. container is to not only facilitate creation, but also disposal of its created resources. The container itself also creates entities with a fixed lifetime, such as a scope within which to request scoped services. You should utilize your test framework’s method for managing these resource’s lifetimes appropriately.</p>
+<h2 id="creating-the-system-under-test" tabindex="-1" id="Creating-the-System-Under-Test"><a class="header-anchor" href="#creating-the-system-under-test">Creating the System Under Test</a></h2>
+<p>By simply resolving the SUT from the created test container, we have a trivial way to begin testing. We’ve massively simplified the <code>Arrange</code> phase of our test by removing all manual code regarding our SUT’s creation, and we can begin arranging the test data to act/assert upon it.</p>
+<h1 id="demonstration" tabindex="-1"><a class="header-anchor" href="#demonstration">Demonstration</a></h1>
+<p>A fully functional application has been setup <a target="_blank" rel="noopener" href="https://github.com/svengeance/demo-integration-testing/tree/main">here</a>. In it, we will find an ASP.NET Core API that talks to a 3’rd party API to save data to a database for later retrieval. The final portion of this article will delve into the architecture of the project and explain the integration testing, relating it to concepts previously mentioned.</p>
+<h2 id="testable-elements" tabindex="-1" id="Testable-Elements"><a class="header-anchor" href="#testable-elements">Testable Elements</a></h2>
+<p>The API features two key external interaction points: a 3’rd party API, and a database. Given the API is not owned resource we can spin up, testing <em>real</em> calls to this API in integration tests is not ideal, however the database (sqlite) can be easily tested against.</p>
+<h2 id="the-plan" tabindex="-1" id="The-Plan"><a class="header-anchor" href="#the-plan">The Plan</a></h2>
+<p>Taking everything stated prior in this article into consideration, our integration test should be planned thusly:</p>
+<ul>
+<li>We wish to avoid manually recreating our systems under test</li>
+<li>We want our integration tested code to mimic <em>as much as possible</em> our real system</li>
+<li>Avoid “Bad Communication”</li>
+<li>As always, we seek to minimize boilerplate and ease testing</li>
+</ul>
+<h2 id="reviewing-the-execution" tabindex="-1" id="Reviewing-the-Execution"><a class="header-anchor" href="#reviewing-the-execution">Reviewing the Execution</a></h2>
+<p>We’ll break down the pieces of the example integration test that demonstate the article’s concepts. At a high level, here are the big pieces of our framework:</p>
+<ul>
+<li>xUnit: Popular testing framework, albeit opinionated about its lifecycle and geared towards integration tests with an unfortunate reliance on construcotrs for shared test context
+<ul>
+<li><code>IAsyncLifetime</code>: Asynchronously create and dispose of a resource, called before/after each test</li>
+<li><code>IClassFixture&lt;TFixture&gt;</code>: Ensure all tests in the same <strong>class</strong> share the same instance of <code>TFixture</code>, essentially creating <code>TFixture</code> once per class. Ideal for expensive initialization</li>
+<li>xUnit Test Lifecycle: Constructors in a test class are called before each test, as is any code in <code>IAsyncLifetime</code></li>
+</ul>
+</li>
+<li>AutoFixture: Facilitates object creation, especially useful for creating objects whose constructors and nullability demand all properties are set despite our test only caring about a few specific ones. “Create an object, I don’t care how, but set this property” is a way to express itnent to future developers</li>
+<li>FluentAssertions: An assertion library; not very relevant for the article, but a preference nonetheless</li>
+</ul>
+<h3 id="mimicking-real-code" tabindex="-1" id="Mimicking-Real-Code"><a class="header-anchor" href="#mimicking-real-code">Mimicking Real Code</a></h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">TestServices</span>: <span class="title">IAsyncLifetime</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">public</span> IServiceProvider Services =&gt; _webApplication.Services;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">readonly</span> WebApplication _webApplication;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">TestServices</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Build our application exactly as is done in `Program`</span></span><br><span class="line">        <span class="keyword">var</span> webApplicationBuilder = WebApplication.CreateBuilder();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Inject any test-specific configuration needed</span></span><br><span class="line">        ConfigureTestConfiguration(webApplicationBuilder.Configuration);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Register all of our application services</span></span><br><span class="line">        webApplicationBuilder.Services.AddApplicationServices(webApplicationBuilder.Configuration);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Inject/override any test-specific services</span></span><br><span class="line">        ConfigureTestServices(webApplicationBuilder.Services);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// Create our app and hold onto it so it can be disposed</span></span><br><span class="line">        _webApplication = webApplicationBuilder.Build();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ConfigureTestServices</span>(<span class="params">IServiceCollection services</span>)</span></span><br><span class="line">    &#123;   </span><br><span class="line">        <span class="comment">// Replace a &quot;bad communication&quot; call with a stub.</span></span><br><span class="line">        services.Replace(ServiceDescriptor.Scoped&lt;IWeatherApiService, WeatherApiServiceStub&gt;());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">ConfigureTestConfiguration</span>(<span class="params">IConfigurationBuilder builder</span>)</span></span><br><span class="line">        =&gt; builder.AddInMemoryCollection(<span class="keyword">new</span> Dictionary&lt;<span class="built_in">string</span>, <span class="built_in">string</span>?&gt;</span><br><span class="line">        &#123;</span><br><span class="line">            [<span class="string">&quot;ConnectionStrings:WeatherDb&quot;</span>] = <span class="string">&quot;DataSource=weatherdb_test.sqlite&quot;</span></span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Task <span class="title">InitializeAsync</span>()</span></span><br><span class="line">        =&gt; Task.CompletedTask;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">DisposeAsync</span>()</span></span><br><span class="line">        =&gt; <span class="keyword">await</span> _webApplication.DisposeAsync();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>This represents our <code>TFixture</code> that will be shared among all tests in a class. The test configuration may read a file such as user secrets or appsettings, so we opt to do this less frequently than for every unique test case. The configuration added in <code>ConfigureTestConfiguration</code> is picked up by our application’s extension <code>AddApplicationServices</code>, giving us a chance to configure test data any way we choose, perhaps user secrets for shared integration test databases, environment variables for our test runners, etc.</p>
+<h3 id="managing-lifetimes-and-facilitating-sut-creation" tabindex="-1" id="Managing-Lifetimes-and-Facilitating-SUT-Creation"><a class="header-anchor" href="#managing-lifetimes-and-facilitating-sut-creation">Managing Lifetimes and Facilitating SUT Creation</a></h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">BaseIntegrationTest</span>: <span class="title">IAsyncLifetime</span>, <span class="title">IClassFixture</span>&lt;<span class="title">TestServices</span>&gt; <span class="comment">// Share `TestServices` among all tests in the class</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">protected</span> IServiceScope ServiceScope &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="keyword">protected</span> WeatherContext WeatherContext &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    <span class="keyword">protected</span> Fixture Fixture &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BaseIntegrationTest</span>(<span class="params">TestServices testServices</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// AutoFixture instance for each test to avoid cross-contamination</span></span><br><span class="line">        Fixture = <span class="keyword">new</span> Fixture();</span><br><span class="line">        <span class="comment">// Fresh ServiceScope to resolve/dispose Scoped services</span></span><br><span class="line">        ServiceScope = testServices.Services.CreateScope();</span><br><span class="line">        <span class="comment">// &quot;Helper&quot;/shortcut reference to our application&#x27;s Context. Useful for whitebox/effectual testing to verify side effects</span></span><br><span class="line">        WeatherContext = ServiceScope.ServiceProvider.GetRequiredService&lt;WeatherContext&gt;();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">InitializeAsync</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Reset our sqlite database to avoid cross-contamination of data.</span></span><br><span class="line">        <span class="comment">// Highly recommend `Respawn` (https://github.com/jbogard/Respawn) to facilitate this in MSSQL or Postgres</span></span><br><span class="line">        <span class="keyword">await</span> WeatherContext.Database.EnsureDeletedAsync();</span><br><span class="line">        <span class="keyword">await</span> WeatherContext.Database.EnsureCreatedAsync();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Task <span class="title">DisposeAsync</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        ServiceScope.Dispose();</span><br><span class="line">        <span class="keyword">return</span> Task.CompletedTask;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Facilitate creation of our SUT by providing a generic class</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title">BaseIntegrationTest</span>&lt;<span class="title">TSut</span>&gt; : <span class="title">BaseIntegrationTest</span> <span class="keyword">where</span> <span class="title">TSut</span> : <span class="keyword">class</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">protected</span> TSut Sut &#123; <span class="keyword">get</span>; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="title">BaseIntegrationTest</span>(<span class="params">TestServices testServices</span>) : <span class="title">base</span>(<span class="params">testServices</span>)</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// Make the bold assumption that services are registered with a single interface. A source-generated approach might solve this better</span></span><br><span class="line">        <span class="keyword">var</span> serviceInterface = <span class="keyword">typeof</span>(TSut).GetInterfaces().Single();</span><br><span class="line">        <span class="comment">// Create our system under test</span></span><br><span class="line">        Sut = (TSut)ServiceScope.ServiceProvider.GetRequiredService(serviceInterface);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Here we can see the creation of a base class which helps manage the lifecycle of our test resources. A large majority of APIs will be primarily concerned with database operations, so we seek to minimize difficult of accessing it by providing every integration test with the database.<br>
+The generic test class lets us define our SUT, precluding the need to manually retrieve it for every integration test. <strong>Note</strong> that we leave our <code>ServiceScope</code> exposed - it is perhaps in a test’s interest to verify side effects from other services’ perspectives by retrieving and asserting against them after executing some action.</p>
+<h3 id="the-test" tabindex="-1" id="The-Test"><a class="header-anchor" href="#the-test">The Test</a></h3>
+<figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">WeatherReadingServiceTests</span>: <span class="title">BaseIntegrationTest</span>&lt;<span class="title">WeatherReadingService</span>&gt;</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">WeatherReadingServiceTests</span>(<span class="params">TestServices testServices</span>) : <span class="title">base</span>(<span class="params">testServices</span>)</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">Save_reading_saves_to_database</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> reading = Fixture.Build&lt;WeatherReading&gt;().Without(w =&gt; w.Id).Create();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> savedReading = <span class="keyword">await</span> Sut.SaveReading(reading);</span><br><span class="line"></span><br><span class="line">        savedReading.Id.Should().NotBe(<span class="number">0</span>);</span><br><span class="line">        savedReading.ConditionText.Should().Be(reading.ConditionText);</span><br><span class="line">        savedReading.TimeOfReading.Should().Be(reading.TimeOfReading);</span><br><span class="line">        savedReading.TemperatureFahrenheit.Should().Be(reading.TemperatureFahrenheit);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    [<span class="meta">Fact</span>]</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">async</span> Task <span class="title">Created_reading_can_be_retrieved</span>()</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">var</span> reading = Fixture.Build&lt;WeatherReading&gt;().Without(w =&gt; w.Id).Create();</span><br><span class="line">        WeatherContext.WeatherReadings.Add(reading);</span><br><span class="line">        <span class="keyword">await</span> WeatherContext.SaveChangesAsync();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> retrievedReading = <span class="keyword">await</span> Sut.GetReading(reading.Id);</span><br><span class="line"></span><br><span class="line">        retrievedReading.Id.Should().NotBe(<span class="number">0</span>);</span><br><span class="line">        retrievedReading.ConditionText.Should().Be(reading.ConditionText);</span><br><span class="line">        retrievedReading.TimeOfReading.Should().Be(reading.TimeOfReading);</span><br><span class="line">        retrievedReading.TemperatureFahrenheit.Should().Be(reading.TemperatureFahrenheit);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Finally, the tests themselves. No boilerplate code (other than an unfortunate constructor) is present. Instead, we can get directly to writing our arrange/act/assertions. The lack of ceremony makes our tests easy to read <strong>and</strong> write, <s>perhaps regretfully</s> alleviating developers of excuses.</p>
+<h1 id="conclusion" tabindex="-1"><a class="header-anchor" href="#conclusion">Conclusion</a></h1>
+<h2 id="closing-thoughts" tabindex="-1" id="Closing-thoughts"><a class="header-anchor" href="#closing-thoughts">Closing thoughts</a></h2>
+<p>This article’s intention is to express the importance of testing <em>real</em> code, minimizing the setup <em>to</em> test, and to offer a reasonable demonstration of how this can be done.</p>
+<h2 id="tl%3Bdr" tabindex="-1" id="TL-DR"><a class="header-anchor" href="#tl%3Bdr">TL;DR</a></h2>
+<p>I get it, no hard feelings - brevity is, perhaps, not my strongsuit.</p>
+<p><strong>Integration Tests <em>Should</em></strong>:</p>
+<ul>
+<li>Test real, production code; don’t fake it or take shortcuts</li>
+<li>Test your system against zero or more external systems</li>
+<li>For ASP.NET Core, have an entrypoint that is either at the HTTP level (E2E Integration Testing) or top-level services</li>
+<li>Only create <a target="_blank" rel="noopener" href="https://www.educative.io/answers/what-is-faking-vs-mocking-vs-stubbing">test doubles</a> for calls to uncontrollable 3’rd party services</li>
+<li>Alleviate developers from as much boilerplate as possible by managing lifecycle and creation of resources</li>
+</ul>
+<p>See https://github.com/svengeance/demo-integration-testing/ for an example.</p>
+<p>Thank you for staying with me. Have a great day, drink water, and enjoy the little things.</p>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#preamble"><span class="toc-number">1.</span> <span class="toc-text">Preamble</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#concepts"><span class="toc-number">2.</span> <span class="toc-text">Concepts</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#testing-taxonomies"><span class="toc-number">2.1.</span> <span class="toc-text">Testing Taxonomies</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#what-to-test,-what-to-fake,-and-isolation"><span class="toc-number">2.1.1.</span> <span class="toc-text">What to Test, What to Fake, and Isolation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#when-to-not-mock"><span class="toc-number">2.1.2.</span> <span class="toc-text">When to NOT Mock</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#stubs,-fakes,-mocks,-and-exceptions-to-the-rules"><span class="toc-number">2.1.3.</span> <span class="toc-text">Stubs, Fakes, Mocks, and Exceptions to the Rules</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#defining-an-%E2%80%9Cintegration-test%E2%80%9D"><span class="toc-number">2.2.</span> <span class="toc-text">Defining an “Integration Test”</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#integration-testing-in-asp.net-core"><span class="toc-number">3.</span> <span class="toc-text">Integration Testing in ASP.NET Core</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#e2e-vs-integration-testing"><span class="toc-number">3.1.</span> <span class="toc-text">E2E vs Integration Testing</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#asp.net-core-vs-.net-framework:-inverted"><span class="toc-number">3.2.</span> <span class="toc-text">ASP.NET Core vs .NET Framework: Inverted</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#bringing-d.i.-to-integration-tests"><span class="toc-number">3.3.</span> <span class="toc-text">Bringing D.I. to Integration Tests</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#test-setup"><span class="toc-number">4.</span> <span class="toc-text">Test Setup</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-d.i.-container"><span class="toc-number">4.1.</span> <span class="toc-text">Creating the D.I. Container</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#cleaning-up-resources"><span class="toc-number">4.2.</span> <span class="toc-text">Cleaning Up Resources</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#creating-the-system-under-test"><span class="toc-number">4.3.</span> <span class="toc-text">Creating the System Under Test</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#demonstration"><span class="toc-number">5.</span> <span class="toc-text">Demonstration</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#testable-elements"><span class="toc-number">5.1.</span> <span class="toc-text">Testable Elements</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#the-plan"><span class="toc-number">5.2.</span> <span class="toc-text">The Plan</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#reviewing-the-execution"><span class="toc-number">5.3.</span> <span class="toc-text">Reviewing the Execution</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#mimicking-real-code"><span class="toc-number">5.3.1.</span> <span class="toc-text">Mimicking Real Code</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#managing-lifetimes-and-facilitating-sut-creation"><span class="toc-number">5.3.2.</span> <span class="toc-text">Managing Lifetimes and Facilitating SUT Creation</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#the-test"><span class="toc-number">5.3.3.</span> <span class="toc-text">The Test</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#conclusion"><span class="toc-number">6.</span> <span class="toc-text">Conclusion</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#closing-thoughts"><span class="toc-number">6.1.</span> <span class="toc-text">Closing thoughts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#tl;dr"><span class="toc-number">6.2.</span> <span class="toc-text">TL;DR</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&text=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&is_video=false&description=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Integration Testing in ASP.NET Core With Simplicity and Elegance&body=Check out this article: https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&title=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&name=Integration Testing in ASP.NET Core With Simplicity and Elegance&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/&t=Integration Testing in ASP.NET Core With Simplicity and Elegance"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023
+    Stephen (Sven) Vernyi
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'svengeance/sven-blog';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>

@@ -11,7 +11,6 @@ if (!!$.prototype.justifiedGallery) {
 }
 
 $(document).ready(function() {
-
   /**
    * Shows the responsive navigation menu on mobile.
    */
