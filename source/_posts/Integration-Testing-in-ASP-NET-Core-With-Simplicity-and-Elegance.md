@@ -274,7 +274,7 @@ public class WeatherReadingServiceTests: BaseIntegrationTest<WeatherReadingServi
 }
 ```
 
-Finally, the tests themselves. No boilerplate code (other than an unfortunate constructor) is present. Instead, we can get directly to writing our arrange/act/assertions. The lack of ceremony makes our tests easy to read **and** write, ~~perhaps regretfully~~ alleviating developers of excuses.
+Finally, the tests themselves. No boilerplate code (other than an unfortunate constructor) is present. Instead, we can get directly to writing our arrange/act/assertions. By moving the complexity of our test resource management to a shared base class and fixture, our tests become simple to read **and** write.
 
 # Conclusion
 
