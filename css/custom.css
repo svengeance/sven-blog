@@ -14,6 +14,6 @@ h3 {
     max-width: 27.5vw !important;
 }
 
-.toc-item {
-    margin: 4px 0px !important;
+.toc-level-1 {
+    margin-top: 8px !important;
 }
