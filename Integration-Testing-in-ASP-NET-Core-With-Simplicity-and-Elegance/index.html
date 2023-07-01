@@ -27,7 +27,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://sven.ai/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/pup-test.png">
 <meta property="article:published_time" content="2023-06-26T05:11:27.000Z">
-<meta property="article:modified_time" content="2023-07-01T06:21:53.970Z">
+<meta property="article:modified_time" content="2023-07-01T06:24:11.287Z">
 <meta property="article:author" content="Stephen (Sven) Vernyi">
 <meta property="article:tag" content="Testing">
 <meta property="article:tag" content="xUnit">
@@ -168,7 +168,7 @@
       
         <time datetime="2023-06-26T05:11:27.000Z" class="dt-published" itemprop="datePublished">2023-06-26</time>
         
-        (Updated: <time datetime="2023-07-01T06:21:53.970Z" class="dt-updated" itemprop="dateModified">2023-07-01</time>)
+        (Updated: <time datetime="2023-07-01T06:24:11.287Z" class="dt-updated" itemprop="dateModified">2023-07-01</time>)
         
       
     </div>
@@ -277,7 +277,7 @@
 <p>Now that there is a shared understanding of the taxonomy of an integration test, we can discuss how the approach might work in ASP.NET Core.</p>
 <h2 id="e2e-vs-integration-testing" tabindex="-1" id="E2E-vs-Integration-Testing"><a class="header-anchor" href="#e2e-vs-integration-testing">E2E vs Integration Testing</a></h2>
 <p>Searching <code>ASP.NET Core Integration Test</code> will lead you to find many articles that talk about integration testing starting at the controller/HTTP level. I find this doesn’t provide much differentiation from an end-to-end test (searching for <code>ASP.NET Core E2E Test</code> will actually give you similar-looking articles!).</p>
-<p>Given that an E2E test in this context requires one to spin up an in-memory test server and form HTTP requests, and that such a webserver may complicate its request handling with various pieces of infrastructure and middleware before reaching the business logic, we can invoke top-level methods in our tests to bypass this. These tests establish confidence that the logic of the application past the web layer is sound, though it comes with the tradeoff of coupling such tests to the public API of your high level services.</p>
+<p>Given that an E2E test in this context requires one to spin up an in-memory test server and form HTTP requests, and that such a webserver may complicate its request handling with various pieces of infrastructure and middleware before reaching the business logic, it often makes sense to directly invoke services. These tests establish confidence that the logic of the application past the web layer is sound, though it comes with the tradeoff of coupling such tests to the public API of your high level services.</p>
 <p>Having both kinds of tests in your suite gives you the opportunity to test individual methods and interim states not possible with E2E tests, which execute endpoints in whole. Understand the pros and cons of each, and vary your amounts accordingly.</p>
 <h2 id="asp.net-core-vs-.net-framework%3A-inverted" tabindex="-1" id="ASP-NET-Core-vs-NET-Framework-Inverted"><a class="header-anchor" href="#asp.net-core-vs-.net-framework%3A-inverted">ASP.NET Core vs .NET Framework: Inverted</a></h2>
 <p>One of the differences between the two frameworks is the first-class support for dependency injection via Microsoft.Extensions.DependencyInjection, and all web project templates using it by default. Another change is the means by which common needs like configuration and HTTP context are accessed, both again receiving first-class DI support as opposed to the traditional static method access.</p>
