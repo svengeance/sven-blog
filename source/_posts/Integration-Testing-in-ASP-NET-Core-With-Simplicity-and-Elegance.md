@@ -1,15 +1,16 @@
 ---
-title: Integration Testing in ASP.NET Core With Simplicity and Elegance
+banner: pup-test.png
+categories:
+  - Testing
+  - Integration Testing
 date: 2023-07-01 00:11:27
+excerpt: Theorizing and writing integration tests from the ground-up for ASP.NET Core.
 tags:
   - Testing
   - xUnit
   - AutoFixture
   - Removing Boilerplate
-categories:
-  - Testing
-  - Integration Testing
-banner: pup-test.png
+title: Integration Testing in ASP.NET Core With Simplicity and Elegance
 ---
 # Preamble
 This short writeup is meant to foster a mutual definition of integration tests, their purpose, and some of their setup. It will briefly cover everything from the conceptual reasoning behind integration tests, to their execution and structure within ASP.NET Core.
