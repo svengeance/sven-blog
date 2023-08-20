@@ -1,6 +1,7 @@
 ---
 banner: pup-test.png
 categories:
+  - Software Development
   - Testing
   - Integration Testing
 date: 2023-07-01 00:11:27
