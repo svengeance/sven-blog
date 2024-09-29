@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- strip the URL before anyone notices -->
+    <script>
+        /**
+         * Trim final slash in URL
+         */
+        if (window.location.pathname.endsWith('/'))
+        {
+          var normalizedLocation = `${location.pathname.slice(0, -1)}${location.hash}`;
+          history.replaceState(null, '', normalizedLocation);    
+        }
+    </script>
+    <!-- so meta -->
+    <meta name="google-site-verification" content="pfK2HraQa10f5oSNeydgO1pIAl_MW6p5LJJmjdMi-s8" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Writing code with intention to help testing, maintainability, and separation of concerns.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Putting Intention and Meaning in Layers of Code">
+<meta property="og:url" content="https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/index.html">
+<meta property="og:site_name" content="Sven">
+<meta property="og:description" content="Writing code with intention to help testing, maintainability, and separation of concerns.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://sven.ai/images/mally_ico.png">
+<meta property="article:published_time" content="2023-09-09T19:27:40.000Z">
+<meta property="article:modified_time" content="2023-10-04T23:46:19.272Z">
+<meta property="article:author" content="Stephen (Sven) Vernyi">
+<meta property="article:tag" content="Architecture">
+<meta property="article:tag" content="Code Quality">
+<meta property="article:tag" content="Clean Code">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sven.ai/images/mally_ico.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-android.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon-apple.png">
+        
+      
+    
+    <!-- title -->
+    <title>Putting Intention and Meaning in Layers of Code</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JPJ6GMQE1Y"></script>
+  <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-JPJ6GMQE1Y');
+  </script>
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    
+<link rel="stylesheet" href="/css/custom.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/Integration-Testing-in-ASP-NET-Core-With-Simplicity-and-Elegance/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&text=Putting Intention and Meaning in Layers of Code"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&is_video=false&description=Putting Intention and Meaning in Layers of Code"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Putting Intention and Meaning in Layers of Code&body=Check out this article: https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&name=Putting Intention and Meaning in Layers of Code&description=Writing code with intention to help testing, maintainability, and separation of concerns."><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&t=Putting Intention and Meaning in Layers of Code"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#preamble"><span class="toc-number">1.</span> <span class="toc-text">Preamble</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#why-bother-with-layers-anyways?"><span class="toc-number">2.</span> <span class="toc-text">Why Bother With Layers Anyways?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#an-example"><span class="toc-number">3.</span> <span class="toc-text">An Example</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        Putting Intention and Meaning in Layers of Code
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Stephen (Sven) Vernyi</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2023-09-09T19:27:40.000Z" class="dt-published" itemprop="datePublished">2023-09-09</time>
+        
+        (Updated: <time datetime="2023-10-04T23:46:19.272Z" class="dt-updated" itemprop="dateModified">2023-10-04</time>)
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/Software-Development/">Software Development</a> › <a class="category-link" href="/categories/Software-Development/Principles/">Principles</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Architecture/" rel="tag">Architecture</a>, <a class="p-category" href="/tags/Clean-Code/" rel="tag">Clean Code</a>, <a class="p-category" href="/tags/Code-Quality/" rel="tag">Code Quality</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="preamble" tabindex="-1"><a class="header-anchor" href="#preamble"><a class="header-anchor" href="#preamble">Preamble</a></a></h1>
+<p>Everyone’s heard of n-tier or <em>onion</em> architecture - layering code by its technical concern (view, data, logic) and why separating them might be in your best interest. It’s not often, though, that code flows so simply without traversing these layers multiple times in slightly different ways. We’ll discuss strategies to help identify and isolate domains in your code that will naturally lead to more functional - and hopefully readable - code, learn some nuance which advocates breaking these layers at times.</p>
+<p>This article is primarily aimed at your standard business applications and will reference well-known business concepts, but can be broadly applicable.</p>
+<h1 id="why-bother-with-layers-anyways%3F" tabindex="-1"><a class="header-anchor" href="#why-bother-with-layers-anyways%3F"><a class="header-anchor" href="#why-bother-with-layers-anyways%3F">Why Bother With Layers Anyways?</a></a></h1>
+<p>There are several reasons to layer your codebase: testability, readability, reusability to name a few. Does this mean that every logical group of code needs to be pulled out into a layer to maximize the aforementioned 'ilities?</p>
+<p>As usual…</p>
+<img src="/Putting-Intention-and-Meaning-in-Layers-of-Code/it-depends.jpg" class="" width="500">
+<p>Extracting code into an outer layer wherever it is carries with it a cost. Rather than isolating some concerns to a particular method or class, you’ve pulled out and exposed it to a broader audience. Later on, you or your fellow devs will have to piecemeal together code in different files in various layers and make sense of it. Another worry might be the stretching and twisting of this pulled-out code in order to be reused. How often have you seen a boolean parameter added to a method to accomplish this, or the internals of the method doing additional work, querying additional data, as more and more possible conditions get added to the domain? Doing so can indicate that the focus of the method is not specific enough (it’s doing too much).</p>
+<p>Code that is sufficiently scoped and located in the appropriate layer is resistant to this kind of change, and that is what we should strive for. Sometimes, that means not moving it into a layer at all.</p>
+<h1 id="an-example" tabindex="-1"><a class="header-anchor" href="#an-example"><a class="header-anchor" href="#an-example">An Example</a></a></h1>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#preamble"><span class="toc-number">1.</span> <span class="toc-text">Preamble</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#why-bother-with-layers-anyways?"><span class="toc-number">2.</span> <span class="toc-text">Why Bother With Layers Anyways?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#an-example"><span class="toc-number">3.</span> <span class="toc-text">An Example</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&text=Putting Intention and Meaning in Layers of Code"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&is_video=false&description=Putting Intention and Meaning in Layers of Code"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Putting Intention and Meaning in Layers of Code&body=Check out this article: https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&title=Putting Intention and Meaning in Layers of Code"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&name=Putting Intention and Meaning in Layers of Code&description=Writing code with intention to help testing, maintainability, and separation of concerns."><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://sven.ai/Putting-Intention-and-Meaning-in-Layers-of-Code/&t=Putting Intention and Meaning in Layers of Code"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2023-2024
+    Stephen (Sven) Vernyi
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a target="_blank" rel="noopener" href="https://github.com/svengeance">Projects</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'svengeance/sven-blog';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-dark';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
