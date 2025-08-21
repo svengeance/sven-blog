@@ -65,7 +65,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "assets/images/mally.png", // Relative to the /src directory. Relative to the /public directory if it starts with '/'
 	name: "Sven Vernyi",
-	bio: "General C# fan. My goal as a dev is to plant and foster eden-esque gardens of code, and inspire others to do the same, such that our work becomes as peaceful as an afternoon stroll.",
+	bio: "General C# fan. I like making it easy to do the right thing, reducing the effort for myself and others to do our jobs.",
 	links: [
 		{
 			name: "GitHub",
