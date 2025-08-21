@@ -73,16 +73,16 @@ export const profileConfig: ProfileConfig = {
 			url: "https://github.com/svengeance",
 		},
 		{
+			name: "Discord",
+			icon: "fa6-brands:discord",
+			url: "discord.com/users/.noxian",
+		},
+		{
 			name: "Twitter",
 			icon: "fa6-brands:twitter", // Visit https://icones.js.org/ for icon codes
 			// You will need to install the corresponding icon set if it's not already included
 			// `pnpm add @iconify-json/<icon-set-name>`
 			url: "https://x.com/stevevernyi",
-		},
-		{
-			name: "Steam",
-			icon: "fa6-brands:steam",
-			url: "https://store.steampowered.com",
 		},
 	],
 };
