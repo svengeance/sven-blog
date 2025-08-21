@@ -84,6 +84,11 @@ export const profileConfig: ProfileConfig = {
 			// `pnpm add @iconify-json/<icon-set-name>`
 			url: "https://x.com/stevevernyi",
 		},
+		{
+			name: "Email",
+			icon: "fa6-regular:envelope",
+			url: "mailto:sven.vernyi@gmail.com",
+		},
 	],
 };
 
