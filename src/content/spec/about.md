@@ -1,9 +1,9 @@
 # About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+This is probably my 3'rd re-imagination of what my personal home for thoughts and vibes looks like. Hugo, then Hexo, then Astro.
 
+::github{repo="svengeance/sven-blog"}
+
+This site was stood up very quickly thanks to the excellent work of:
 ::github{repo="saicaca/fuwari"}
 
-> ### Sources of images used in this site
-> - [Unsplash](https://unsplash.com/)
-> - [星と少女](https://www.pixiv.net/artworks/108916539) by [Stella](https://www.pixiv.net/users/93273965)
-> - [Rabbit - v1.4 Showcase](https://civitai.com/posts/586908) by [Rabbit_YourMajesty](https://civitai.com/user/Rabbit_YourMajesty)
+This theme feels much more home to me than the minimalistic looks I've attempted in the past.
