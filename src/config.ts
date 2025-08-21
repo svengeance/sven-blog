@@ -31,19 +31,19 @@ export const siteConfig: SiteConfig = {
 	},
 	favicon: [
 		{
-		  src: 'favicon/mally-16x16.png',
+		  src: '/favicon/mally-16x16.png',
 		  sizes: '16x16',
 		},
 		{
-		  src: 'favicon/mally-32x32.png',
+		  src: '/favicon/mally-32x32.png',
 		  sizes: '32x32',
 		},
 		{
-		  src: 'favicon/mally-192x192.png',
+		  src: '/favicon/mally-192x192.png',
 		  sizes: '192x192',
 		},
 		{
-		  src: 'favicon/mally-512x512.png',
+		  src: '/favicon/mally-512x512.png',
 		  sizes: '512x512',
 		},
 	],
