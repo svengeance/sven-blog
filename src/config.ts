@@ -10,6 +10,7 @@ import { LinkPreset } from "./types/config";
 export const siteConfig: SiteConfig = {
 	title: "Sven",
 	subtitle: "Home",
+	ogDescription: "Random meanderings of an over-caffeinated developer",
 	ogImage: "/images/mally.png",
 	lang: "en", // Language code, e.g. 'en', 'zh_CN', 'ja', etc.
 	themeColor: {
