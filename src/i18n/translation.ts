@@ -11,9 +11,7 @@ import { vi } from "./languages/vi";
 import { zh_CN } from "./languages/zh_CN";
 import { zh_TW } from "./languages/zh_TW";
 
-export type Translation = {
-	[K in I18nKey]: string;
-};
+export type Translation = Partial<Record<I18nKey, string>>;
 
 const defaultTranslation = en;
 
@@ -44,5 +42,5 @@ export function getTranslation(lang: string): Translation {
 
 export function i18n(key: I18nKey): string {
 	const lang = siteConfig.lang || "en";
-	return getTranslation(lang)[key];
+	return getTranslation(lang)[key] || key;
 }

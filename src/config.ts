@@ -55,6 +55,11 @@ export const navBarConfig: NavBarConfig = {
 	links: [
 		LinkPreset.Home,
 		LinkPreset.Archive,
+		{
+			name: "Future Posts",
+			url: "/future-posts/",
+			external: false
+		},
 		LinkPreset.About,
 		{
 			name: "GitHub",
