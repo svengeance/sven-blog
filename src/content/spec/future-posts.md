@@ -8,6 +8,11 @@ I'd like to establish a playful domain that exhibits many of the same real-world
 
 My goal would be to always have _real, usable_ code to point to, and more than one example to showcase in my writings.
 
+This effort is currently underway here:
+
+::github{repo="Svengeance/KittenFactory"}
+
+
 ### Testing
 - Discussing unit/integration/e2e tests from the perspective of cost-value and maintenance
 - Strategies for unit testing pure and impure code, with and without external dependencies
