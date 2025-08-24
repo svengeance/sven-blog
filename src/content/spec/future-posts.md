@@ -12,6 +12,9 @@ This effort is currently underway here:
 
 ::github{repo="Svengeance/KittenFactory"}
 
+### Software Patterns
+- Pros/cons and when to use the Result pattern
+- When a Repository makes sense (with/without ORMs)
 
 ### Testing
 - Discussing unit/integration/e2e tests from the perspective of cost-value and maintenance
