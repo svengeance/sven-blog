@@ -1,5 +1,6 @@
 ---
 title: Aspiring to be Great - Expectations, Hopes, and Dreams
+description: Diving into .NET Aspire, one dependency at a time
 published: 2025-09-07
 tags: [Aspire, DevX, Tools]
 category: Devlog
