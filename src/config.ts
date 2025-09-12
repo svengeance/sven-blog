@@ -85,7 +85,12 @@ export const profileConfig: ProfileConfig = {
 		{
 			name: "Discord",
 			icon: "fa6-brands:discord",
-			url: "discord.com/users/.noxian",
+			url: "https://discord.com/users/.noxian",
+		},
+		{
+			name: "Reddit",
+			icon: "fa6-brands:reddit",
+			url: "https://reddit.com/u/SvenTheDev",
 		},
 		{
 			name: "Twitter",
