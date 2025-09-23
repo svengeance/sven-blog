@@ -4,7 +4,7 @@ published: 2025-09-12
 image: "./kitten-factory.webp"
 description: Building something deep enough to write about, but simple enough to grok at a glance.
 tags: [Meta]
-category: Meta
+category: Devlog
 draft: false
 ---
 
