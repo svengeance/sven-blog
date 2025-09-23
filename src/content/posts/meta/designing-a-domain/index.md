@@ -1,5 +1,5 @@
 ---
-title: Designing a Domain
+title: Designing a Domain - Part 1 - Beginnings
 published: 2025-09-12
 image: "./kitten-factory.webp"
 description: Building something deep enough to write about, but simple enough to grok at a glance.
